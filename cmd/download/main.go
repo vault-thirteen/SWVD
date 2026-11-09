@@ -20,6 +20,8 @@ const (
 )
 
 const (
+	Msg_FailedUrls = "Download failed for following URLs:"
+
 	Msgf_SkippingExistingFile = "skipping existing file %s"
 )
 
@@ -127,6 +129,8 @@ func (t *Task) downloadBestStreams(bestStreams []*m.BestStream) (err error) {
 	var dstFileName string
 	var dstFilePath string
 	var buf []byte
+	var failedUrls = make([]*m.FailedUrl, 0)
+	var fu *m.FailedUrl
 	for _, bs := range bestStreams {
 		dstFileName = m.FormatVideoFileName(bs.VideoId, bs.Stream.Resolution)
 		dstFilePath = filepath.Join(authorVideoFolderPath, dstFileName)
@@ -144,6 +148,8 @@ func (t *Task) downloadBestStreams(bestStreams []*m.BestStream) (err error) {
 		buf, err = m.FetchDataFromUrl(bs.Stream.Url, t.s)
 		if err != nil {
 			if t.s.IgnoreDownloadErrors {
+				fu = m.NewFailedUrl(bs.Stream.Url, err)
+				failedUrls = append(failedUrls, fu)
 				errors.LogError(err)
 				continue
 			} else {
@@ -154,6 +160,14 @@ func (t *Task) downloadBestStreams(bestStreams []*m.BestStream) (err error) {
 		err = file.SaveBytesToFile(dstFilePath, buf)
 		if err != nil {
 			return err
+		}
+	}
+
+	if t.s.IgnoreDownloadErrors {
+		cio.PrintMessage()
+		cio.PrintMessage(Msg_FailedUrls)
+		for _, fu = range failedUrls {
+			cio.PrintMessage(fu.Url)
 		}
 	}
 
