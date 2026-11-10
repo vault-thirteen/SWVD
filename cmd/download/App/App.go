@@ -68,33 +68,32 @@ func (a *App) CollectAuthorsVideos() (bestStreams []*m.BestStream, err error) {
 
 	return bestStreams, nil
 }
-func (a *App) DownloadBestStreams(bestStreams []*m.BestStream) (err error) {
+func (a *App) DownloadBestStreams(bestStreams []*m.BestStream) (report *m.DownloadReport, err error) {
 	var videoFolderPath = m.MakeVideoFolderPath(a.ts.Common.DataFolder)
 	err = file.CreateFolderIfNotExists(videoFolderPath, a.ts.Common.NewFolderPermissions)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var authorVideoFolderPath = m.MakeAuthorVideoFolderPath(a.ts.Common.DataFolder, a.ts.Custom.AuthorName)
 	err = file.CreateFolderIfNotExists(authorVideoFolderPath, a.ts.Common.NewFolderPermissions)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Fetch files.
+	report = m.NewDownloadReport(a.ts.Custom.AuthorName)
 	var fileExists bool
 	var dstFileName string
 	var dstFilePath string
 	var buf []byte
-	var failedUrls = make([]*m.FailedUrl, 0)
-	var fu *m.FailedUrl
 	for _, bs := range bestStreams {
 		dstFileName = m.FormatVideoFileName(bs.VideoId, bs.Stream.Resolution)
 		dstFilePath = filepath.Join(authorVideoFolderPath, dstFileName)
 
 		fileExists, err = file.FileExists(dstFilePath)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		if fileExists {
@@ -104,34 +103,41 @@ func (a *App) DownloadBestStreams(bestStreams []*m.BestStream) (err error) {
 
 		buf, err = m.FetchDataFromUrl(bs.Stream.Url, a.ts)
 		if err != nil {
-			if a.ts.Common.IgnoreDownloadErrors {
-				fu = m.NewFailedUrl(bs.Stream.Url, err)
-				failedUrls = append(failedUrls, fu)
-				errors.LogError(err)
-				continue
-			} else {
-				return err
-			}
+			report.AddOpReport(dstFileName, bs.Stream.Url, err, m.OpReportErrorType_Download)
+			continue
 		}
 
 		err = file.SaveBytesToFile(dstFilePath, buf)
 		if err != nil {
-			return err
+			report.AddOpReport(dstFileName, bs.Stream.Url, err, m.OpReportErrorType_Storage)
+			continue
 		}
+
+		report.AddOpReport(dstFileName, bs.Stream.Url, nil, m.OpReportErrorType_None)
 	}
 
-	if a.ts.Common.IgnoreDownloadErrors {
-		// Visual separator.
-		cio.PrintMessage()
+	report.SetTimeEnd()
+	return report, nil
+}
+func (a *App) ProcessReport(report *m.DownloadReport) (err error) {
+	report.Print()
 
-		if len(failedUrls) > 0 {
-			cio.PrintMessage(cio.FormatMessage(m.Msgf_FailedUrlsN, len(failedUrls)))
-			for _, fu = range failedUrls {
-				cio.PrintMessage(fu.Url)
-			}
-		} else {
-			cio.PrintMessage(m.Msg_AllDownloadsSucceeded)
-		}
+	if report.FailedOpsCount == 0 {
+		return nil
+	}
+
+	var reportsFolderPath = a.ts.Common.ReportFolder
+	err = file.CreateFolderIfNotExists(reportsFolderPath, a.ts.Common.NewFolderPermissions)
+	if err != nil {
+		return err
+	}
+
+	var fReport = report.CopyFailedOpsReport()
+	var fileName = m.MakeReportFileName(fReport.AuthorName, fReport.EndTimeForFileName())
+	var filePath = m.MakeReportFilePath(a.ts.Common.ReportFolder, fileName)
+	err = fReport.SaveFailedOpsToFile(filePath, a.ts.Common.NewFilePermissions)
+	if err != nil {
+		return err
 	}
 
 	return nil

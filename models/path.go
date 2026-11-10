@@ -36,6 +36,12 @@ func MakeVideoStreamsFileName(videoId string) string {
 func FormatVideoFileName(videoId string, resolution string) string {
 	return cio.FormatMessage(VideoFileNameFormat, videoId, resolution)
 }
+func MakeReportFileName(authorName string, timeString string) string {
+	return authorName + Underscore + timeString + Dot + Ext_Json
+}
+func MakeReportFilePath(reportFolder string, fileName string) string {
+	return filepath.Join(reportFolder, fileName)
+}
 
 func MakeRootFilePath(dataFolder string, filename string) string {
 	return filepath.Join(dataFolder, filename)

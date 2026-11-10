@@ -19,6 +19,7 @@
     "newFolderPermissions": 644,
     "newFilePermissions": 777,
     "printUrl": true,
-    "ignoreDownloadErrors": true
+    "saveFailedReport": true,
+    "reportFolder": "report"
   }
 }

@@ -29,6 +29,9 @@ func main() {
 	bestStreams, err = app.CollectAuthorsVideos()
 	m.MustBeNoError(err)
 
-	err = app.DownloadBestStreams(bestStreams)
+	var report *m.DownloadReport
+	report, err = app.DownloadBestStreams(bestStreams)
+	m.MustBeNoError(err)
+	err = app.ProcessReport(report)
 	m.MustBeNoError(err)
 }

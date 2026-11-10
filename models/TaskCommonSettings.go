@@ -16,6 +16,7 @@ type TaskCommonSettings struct {
 	NewFilePermissions   os.FileMode `json:"newFilePermissions"`
 
 	// Behaviour.
-	PrintUrl             bool `json:"printUrl"`
-	IgnoreDownloadErrors bool `json:"ignoreDownloadErrors"`
+	PrintUrl         bool   `json:"printUrl"`
+	SaveFailedReport bool   `json:"saveFailedReport"`
+	ReportFolder     string `json:"reportFolder"`
 }
