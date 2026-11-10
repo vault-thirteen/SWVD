@@ -28,6 +28,6 @@ Ideas from this tool can be taken to create more complex tools.
 
 ## Installation
 
-`go install https://github.com/vault-thirteen/SWVD/cmd/list@latest`
+`go install github.com/vault-thirteen/SWVD/cmd/list@latest`
 
-`go install https://github.com/vault-thirteen/SWVD/cmd/download@latest`
+`go install github.com/vault-thirteen/SWVD/cmd/download@latest`
