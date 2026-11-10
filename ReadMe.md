@@ -25,3 +25,9 @@ Ideas from this tool can be taken to create more complex tools.
 > list.exe settings\settings.json Author 2
 
 > download.exe settings\settings.json Author 1080
+
+## Installation
+
+`go install https://github.com/vault-thirteen/SWVD/cmd/list@latest`
+
+`go install https://github.com/vault-thirteen/SWVD/cmd/download@latest`
