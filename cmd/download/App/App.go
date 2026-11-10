@@ -125,6 +125,9 @@ func (a *App) ProcessReport(report *m.DownloadReport) (err error) {
 	if report.FailedOpsCount == 0 {
 		return nil
 	}
+	if !a.ts.Common.SaveFailedReport {
+		return nil
+	}
 
 	var reportsFolderPath = a.ts.Common.ReportFolder
 	err = file.CreateFolderIfNotExists(reportsFolderPath, a.ts.Common.NewFolderPermissions)
