@@ -16,12 +16,12 @@ Ideas from this tool can be taken to create more complex tools.
 
 ## Usage
 
-`list.exe <AuthorName> <PagesCount> <CookiesFilePath> <DataFolder>`
+`list.exe <SettingsFilePath> <AuthorName> <PagesCount>`
 
-`download.exe <AuthorName> <CookiesFilePath> <DataFolder> <Quality>`
+`download.exe <SettingsFilePath> <AuthorName> <Quality>`
 
 ### Example
 
-> list.exe John123 2 settings\cookies.json data`
+> list.exe settings\settings.json Author 2`
 
-> download.exe John123 settings\cookies.json data 1080`
+> download.exe settings\settings.json Author 1080`

@@ -9,7 +9,6 @@ import (
 	utls "github.com/refraction-networking/utls"
 	"github.com/vault-thirteen/auxie/cio"
 	"github.com/vault-thirteen/auxie/errors"
-	"github.com/vault-thirteen/auxie/header"
 )
 
 var customClientHelloId = utls.HelloFirefox_Auto
@@ -21,7 +20,7 @@ func FetchDataFromUrl(url string, taskSettings *TaskSettings) (data []byte, err 
 		return nil, err
 	}
 
-	for _, cookie := range taskSettings.Cookies {
+	for _, cookie := range taskSettings.Common.Cookies {
 		httpReq.AddCookie(&http.Cookie{Name: cookie.Name, Value: cookie.Value})
 	}
 
@@ -49,15 +48,21 @@ func FetchDataFromUrl(url string, taskSettings *TaskSettings) (data []byte, err 
 	}
 
 	var httpClient *http.Client
-	if taskSettings.UseCustomTransport {
+	if taskSettings.Common.UseCustomTransport {
 		httpClient = &http.Client{Transport: httpTransport}
 	} else {
 		httpClient = &http.Client{}
 	}
 
-	httpReq.Header.Set(header.HttpHeaderUserAgent, taskSettings.Header_UserAgent)
+	for _, hh := range taskSettings.Common.HttpHeaders {
+		if len(hh.Name) == 0 {
+			continue
+		}
 
-	if taskSettings.PrintUrl {
+		httpReq.Header.Set(hh.Name, hh.Value)
+	}
+
+	if taskSettings.Common.PrintUrl {
 		cio.PrintMessage(url)
 	}
 

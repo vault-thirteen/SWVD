@@ -4,15 +4,19 @@ import (
 	"encoding/json"
 	"os"
 
-	s "github.com/vault-thirteen/SWVD/settings"
 	"github.com/vault-thirteen/auxie/file"
 )
 
+const (
+	JsonFileIndent = "\t"
+)
+
 func SaveAuthorVideosListOnDisk(authorName string, authorPageUrl string, videos []*Video, filePath string, filePermissions os.FileMode) (err error) {
-	var obj = Videos{
-		AuthorName: authorName,
-		AuthorPage: authorPageUrl,
-		Videos:     videos,
+	var obj = AuthorVideos{
+		AuthorName:  authorName,
+		AuthorPage:  authorPageUrl,
+		VideosCount: len(videos),
+		Videos:      videos,
 	}
 
 	return SaveObjectOnDisk(obj, filePath, filePermissions)
@@ -29,7 +33,7 @@ func SaveVideoStreamsOnDisk(authorName string, authorPage string, videoId string
 }
 func SaveObjectOnDisk(object any, filePath string, filePermissions os.FileMode) (err error) {
 	var buf []byte
-	buf, err = json.MarshalIndent(object, "", s.JsonFileIndent)
+	buf, err = json.MarshalIndent(object, "", JsonFileIndent)
 	if err != nil {
 		return err
 	}

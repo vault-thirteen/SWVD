@@ -11,6 +11,7 @@ const (
 	UrlQuerySeparator = "&"
 	UrlEqualSign      = "="
 	UrlSlash          = `/`
+	UrlShemaPostfix   = `://`
 
 	UrlPath_Watch  = "watch"
 	UrlPath_Search = "search"
@@ -46,8 +47,8 @@ func (um *UrlMaker) MakeVideoPageUrl(videoId string) string {
 }
 
 func (um *UrlMaker) UrlWatch() string {
-	return um.schema + um.domain + UrlSlash + UrlPath_Watch
+	return um.schema + UrlShemaPostfix + um.domain + UrlSlash + UrlPath_Watch
 }
 func (um *UrlMaker) UrlSearch() string {
-	return um.schema + um.domain + UrlSlash + UrlPath_Search
+	return um.schema + UrlShemaPostfix + um.domain + UrlSlash + UrlPath_Search
 }
