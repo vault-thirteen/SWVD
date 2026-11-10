@@ -22,6 +22,6 @@ Ideas from this tool can be taken to create more complex tools.
 
 ### Example
 
-> list.exe settings\settings.json Author 2`
+> list.exe settings\settings.json Author 2
 
-> download.exe settings\settings.json Author 1080`
+> download.exe settings\settings.json Author 1080
