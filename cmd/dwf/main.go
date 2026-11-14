@@ -86,8 +86,19 @@ func downloadFailedFiles(settings *m.TaskSettings, report *m.DownloadReport) (er
 	}
 
 	var dstFilePath string
+	var fileExists bool
 	for _, rep := range report.FailedOpReports {
 		dstFilePath = filepath.Join(authorVideoFolderPath, rep.FileName)
+		fileExists, err = file.FileExists(dstFilePath)
+		if err != nil {
+			return err
+		}
+
+		if fileExists {
+			cio.PrintMessage(cio.FormatMessage(m.Msgf_SkippingExistingFile, rep.FileName))
+			continue
+		}
+
 		cio.PrintMessage(rep.URL)
 
 		err = pw.DownloadFile(rep.URL, dstFilePath)
