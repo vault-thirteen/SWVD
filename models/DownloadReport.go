@@ -32,6 +32,18 @@ func NewDownloadReport(authorName string) (dr *DownloadReport) {
 
 	return dr
 }
+func NewDownloadReportFromFile(filePath string) (dr *DownloadReport, err error) {
+	var drj *DownloadReportJson
+	drj, err = ReadObjectFromDisk[DownloadReportJson](filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	out := drj.ToDownloadReport()
+
+	return &out, nil
+}
+
 func (dr DownloadReport) CopyFailedOpsReport() (out DownloadReport) {
 	out = DownloadReport{
 		AuthorName:      dr.AuthorName,
@@ -50,7 +62,6 @@ func (dr DownloadReport) CopyFailedOpsReport() (out DownloadReport) {
 
 	return out
 }
-
 func (dr *DownloadReport) AddOpReport(fileName string, url string, err error, errorType OpReportErrorType) {
 	if len(fileName) == 0 {
 		return

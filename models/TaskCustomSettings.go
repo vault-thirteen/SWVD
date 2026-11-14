@@ -5,4 +5,7 @@ type TaskCustomSettings struct {
 	AuthorName string
 	Quality    QualityInt
 	PagesCount int
+
+	// Report Processing.
+	DeleteReportAfterSuccess bool
 }

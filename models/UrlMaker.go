@@ -1,6 +1,9 @@
 package m
 
-import "strconv"
+import (
+	"net/url"
+	"strconv"
+)
 
 const (
 	UrlParam_Page  = `page`
@@ -37,10 +40,10 @@ func (um *UrlMaker) MakeAuthorPageNUrl(authorName string, pageNumber int) string
 	}
 
 	if pageNumber == 1 {
-		return um.UrlSearch() + UrlQueryPrefix + UrlParam_Query + UrlEqualSign + authorName
+		return um.UrlSearch() + UrlQueryPrefix + UrlParam_Query + UrlEqualSign + url.QueryEscape(authorName)
 	}
 
-	return um.UrlSearch() + UrlQueryPrefix + UrlParam_Query + UrlEqualSign + authorName + UrlQuerySeparator + UrlParam_Page + UrlEqualSign + strconv.Itoa(pageNumber)
+	return um.UrlSearch() + UrlQueryPrefix + UrlParam_Query + UrlEqualSign + url.QueryEscape(authorName) + UrlQuerySeparator + UrlParam_Page + UrlEqualSign + strconv.Itoa(pageNumber)
 }
 func (um *UrlMaker) MakeVideoPageUrl(videoId string) string {
 	return um.UrlWatch() + UrlQueryPrefix + UrlParam_V + UrlEqualSign + videoId

@@ -9,3 +9,8 @@ cd cmd\download
 go build
 move *.exe ..\..
 cd ..\..
+
+cd cmd\dwf
+go build
+move *.exe ..\..
+cd ..\..
