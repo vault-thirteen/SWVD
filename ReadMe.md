@@ -20,14 +20,20 @@ Ideas from this tool can be taken to create more complex tools.
 
 `download.exe <SettingsFilePath> <AuthorName> <Quality>`
 
+`dwf.exe <SettingsFilePath> <DeleteReportAfterSuccess>`
+
 ### Example
 
 > list.exe settings\settings.json Author 2
 
 > download.exe settings\settings.json Author 1080
 
+> dwf.exe settings\settings.json true
+
 ## Installation
 
 `go install github.com/vault-thirteen/SWVD/cmd/list@latest`
 
 `go install github.com/vault-thirteen/SWVD/cmd/download@latest`
+
+`go install github.com/vault-thirteen/SWVD/cmd/dwf@latest`
