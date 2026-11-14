@@ -69,13 +69,13 @@ func (a *App) CollectAuthorsVideos() (bestStreams []*m.BestStream, err error) {
 	return bestStreams, nil
 }
 func (a *App) DownloadBestStreams(bestStreams []*m.BestStream) (report *m.DownloadReport, err error) {
-	var videoFolderPath = m.MakeVideoFolderPath(a.ts.Common.DataFolder)
+	var videoFolderPath = m.MakeVideoFolderPath()
 	err = file.CreateFolderIfNotExists(videoFolderPath, a.ts.Common.NewFolderPermissions)
 	if err != nil {
 		return nil, err
 	}
 
-	var authorVideoFolderPath = m.MakeAuthorVideoFolderPath(a.ts.Common.DataFolder, a.ts.Custom.AuthorName)
+	var authorVideoFolderPath = m.MakeAuthorVideoFolderPath(a.ts.Custom.AuthorName)
 	err = file.CreateFolderIfNotExists(authorVideoFolderPath, a.ts.Common.NewFolderPermissions)
 	if err != nil {
 		return nil, err

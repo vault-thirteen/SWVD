@@ -73,7 +73,18 @@ func processReport(settings *m.TaskSettings, reportFileName string) (err error) 
 	return nil
 }
 func downloadFailedFiles(settings *m.TaskSettings, report *m.DownloadReport) (err error) {
-	var authorVideoFolderPath = m.MakeAuthorVideoFolderPath(settings.Common.DataFolder, report.AuthorName)
+	var videoFolderPath = m.MakeVideoFolderPath()
+	err = file.CreateFolderIfNotExists(videoFolderPath, settings.Common.NewFolderPermissions)
+	if err != nil {
+		return err
+	}
+
+	var authorVideoFolderPath = m.MakeAuthorVideoFolderPath(report.AuthorName)
+	err = file.CreateFolderIfNotExists(authorVideoFolderPath, settings.Common.NewFolderPermissions)
+	if err != nil {
+		return err
+	}
+
 	var dstFilePath string
 	for _, rep := range report.FailedOpReports {
 		dstFilePath = filepath.Join(authorVideoFolderPath, rep.FileName)

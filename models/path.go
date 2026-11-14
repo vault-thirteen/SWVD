@@ -46,11 +46,11 @@ func MakeReportFilePath(reportFolder string, fileName string) string {
 func MakeRootFilePath(dataFolder string, filename string) string {
 	return filepath.Join(dataFolder, filename)
 }
-func MakeVideoFolderPath(dataFolder string) string {
-	return filepath.Join(dataFolder, Folder_Video)
+func MakeVideoFolderPath() string {
+	return Folder_Video
 }
-func MakeAuthorVideoFolderPath(dataFolder string, authorName string) string {
-	return filepath.Join(dataFolder, Folder_Video, authorName)
+func MakeAuthorVideoFolderPath(authorName string) string {
+	return filepath.Join(Folder_Video, authorName)
 }
 func MakeAuthorJsonFilePath(dataFolder string, authorName string, filename string) string {
 	return filepath.Join(MakeAuthorJsonFolder(dataFolder, authorName), filename)
