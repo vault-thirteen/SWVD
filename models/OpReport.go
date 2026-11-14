@@ -22,7 +22,7 @@ func NewOpReport(fileName string, url string, err error, errorType OpReportError
 	}
 }
 
-func (op *OpReport) TimeString() string {
+func (op OpReport) TimeString() string {
 	return op.Time.UTC().Format(OpTimeFormat)
 }
 func (op OpReport) CopyWithTextError() (out OpReport) {

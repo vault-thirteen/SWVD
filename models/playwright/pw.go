@@ -35,7 +35,7 @@ func DownloadFile(url string, dstFilePath string) (err error) {
 		err = errors.Combine(err, derr)
 	}()
 
-	userPrefs := map[string]interface{}{
+	userPrefs := map[string]any{
 		// 2 = DoH first with fallback to native DNS
 		// 3 = DoH only (strict mode, no fallback)
 		"network.trr.mode": 3,
@@ -61,7 +61,7 @@ func DownloadFile(url string, dstFilePath string) (err error) {
 
 	var browser playwright.Browser
 	browser, err = pw.Firefox.Launch(playwright.BrowserTypeLaunchOptions{
-		Headless:         playwright.Bool(false),
+		Headless:         new(false),
 		FirefoxUserPrefs: userPrefs,
 	})
 	if err != nil {

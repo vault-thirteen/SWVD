@@ -44,7 +44,7 @@ func NewDownloadReportFromFile(filePath string) (dr *DownloadReport, err error) 
 	return &out, nil
 }
 
-func (dr DownloadReport) CopyFailedOpsReport() (out DownloadReport) {
+func (dr *DownloadReport) CopyFailedOpsReport() (out DownloadReport) {
 	out = DownloadReport{
 		AuthorName:      dr.AuthorName,
 		TimeStart:       dr.TimeStart,
