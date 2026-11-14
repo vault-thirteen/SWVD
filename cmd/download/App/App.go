@@ -53,6 +53,11 @@ func (a *App) CollectAuthorsVideos() (bestStreams []*m.BestStream, err error) {
 			return nil, err
 		}
 
+		if len(vss.Streams) == 0 {
+			cio.PrintMessage(cio.FormatMessage(m.Msgf_SkippingVideoWithNoStreams, vss.VideoId))
+			continue
+		}
+
 		var bestIdx int
 		bestIdx, err = vss.FindBestStreamByQuality(a.ts.Custom.Quality)
 		if err != nil {
